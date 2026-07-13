@@ -1,0 +1,56 @@
+services:
+  - type: web
+    name: n8n-service
+    runtime: image
+    image:
+      url: docker.n8n.io/n8nio/n8n:latest
+
+    plan: free
+    autoDeploy: true
+
+    envVars:
+      - key: N8N_HOST
+        value: 0.0.0.0
+
+      - key: N8N_PORT
+        value: 5678
+
+      - key: N8N_PROTOCOL
+        value: https
+
+      - key: WEBHOOK_URL
+        sync: false
+
+      - key: DB_TYPE
+        value: postgresdb
+
+      - key: DB_POSTGRESDB_HOST
+        fromDatabase:
+          name: n8n-db
+          property: host
+
+      - key: DB_POSTGRESDB_PORT
+        fromDatabase:
+          name: n8n-db
+          property: port
+
+      - key: DB_POSTGRESDB_DATABASE
+        fromDatabase:
+          name: n8n-db
+          property: database
+
+      - key: DB_POSTGRESDB_USER
+        fromDatabase:
+          name: n8n-db
+          property: user
+
+      - key: DB_POSTGRESDB_PASSWORD
+        fromDatabase:
+          name: n8n-db
+          property: password
+
+databases:
+  - name: n8n-db
+    databaseName: n8n
+    user: n8n
+    plan: free
